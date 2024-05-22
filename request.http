@@ -22,5 +22,5 @@ PATCH {{baseUrl}}/auth/1
 Content-Type: application/json
 
 {
-  "password": "aaa"
+  "password": "aaaa"
 }
