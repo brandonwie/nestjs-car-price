@@ -9,21 +9,18 @@ Content-Type: application/json
 }
 
 ### Remove User
-DELETE {{baseUrl}}/auth/delete
-Content-Type: application/json
-
-{
-  "id": 5
-}
+DELETE {{baseUrl}}/auth/6
 
 ### Get User by ID
 GET {{baseUrl}}/auth/1
 
-
 ### Get Users by Email
-GET {{baseUrl}}/auth/user
+GET {{baseUrl}}/auth?email=test@email.com
+
+### Update User by ID
+PATCH {{baseUrl}}/auth/1
 Content-Type: application/json
 
 {
-  "email": "test@email.com"
+  "password": "aaa"
 }
