@@ -1,0 +1,29 @@
+### Create User
+@baseUrl = http://localhost:3000
+POST {{baseUrl}}/auth/signup
+Content-Type: application/json
+
+{
+  "email": "test@email.com",
+  "password": "test"
+}
+
+### Remove User
+DELETE {{baseUrl}}/auth/delete
+Content-Type: application/json
+
+{
+  "id": 5
+}
+
+### Get User by ID
+GET {{baseUrl}}/auth/1
+
+
+### Get Users by Email
+GET {{baseUrl}}/auth/user
+Content-Type: application/json
+
+{
+  "email": "test@email.com"
+}
