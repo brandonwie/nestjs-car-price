@@ -6,15 +6,15 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { plainToInstance } from 'class-transformer';
+import { ClassConstructor, plainToInstance } from 'class-transformer';
 
-export function Serialize(dto: any) {
+export function Serialize(dto: ClassConstructor<any>) {
   return UseInterceptors(new SerializeInterceptor(dto));
 }
 
 // Satisfies all the requirements of the NestInterceptor interface
 export class SerializeInterceptor implements NestInterceptor {
-  constructor(private dto: any) {}
+  constructor(private dto: ClassConstructor<any>) {}
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     // context has incoming message, server response, next function
     // and constructorRef(what class is being used in the controller), handler, contextType(http, graphql, rpc, ws)
