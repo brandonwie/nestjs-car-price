@@ -1,5 +1,6 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { UsersService } from './users.service';
+import { genSalt } from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -12,6 +13,7 @@ export class AuthService {
       throw new ConflictException('email in use');
     }
     // Hash the user's password
+    bcrypt.getSalt();
 
     // Create a new user and save it
 
