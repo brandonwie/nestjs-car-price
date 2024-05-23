@@ -1,4 +1,3 @@
-import { Exclude } from 'class-transformer';
 import { IsEmail } from 'class-validator';
 import {
   AfterInsert,
@@ -19,7 +18,6 @@ export class User {
   email: string;
 
   @Column()
-  @Exclude()
   password: string;
 
   @AfterInsert()
