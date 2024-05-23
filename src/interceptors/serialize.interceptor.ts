@@ -1,7 +1,16 @@
-import { NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';
+import {
+  NestInterceptor,
+  ExecutionContext,
+  CallHandler,
+  UseInterceptors,
+} from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
+
+export function Serialize(dto: any) {
+  return UseInterceptors(new SerializeInterceptor(dto));
+}
 
 // Satisfies all the requirements of the NestInterceptor interface
 export class SerializeInterceptor implements NestInterceptor {
@@ -13,13 +22,18 @@ export class SerializeInterceptor implements NestInterceptor {
     // the next.handle() returns an Observable representing the response stream from the route handler.
 
     return next.handle().pipe(
-      map((data: typeof this.dto) => {
+      map((data) => {
+        // the `data` here is the return value from the route handler (if User entity is returned, it will be the User entity)
         console.log({ data });
-        // data is the Entity that is being returned from the handler
-        return plainToClass(this.dto, data, {
+        return plainToInstance(this.dto, data, {
           excludeExtraneousValues: true, // only include properties that are defined in the DTO
         });
       }),
+      // the `data below is the return value of the previous operator function (so the return value of `plainToInstance()` )
+      // map((data) => {
+      //   console.log({ data });
+      //   return { data };
+      // }),
     );
   }
 }
