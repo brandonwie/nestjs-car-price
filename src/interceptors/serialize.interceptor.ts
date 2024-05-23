@@ -1,26 +1,24 @@
-import {
-  UseInterceptors,
-  NestInterceptor,
-  ExecutionContext,
-  CallHandler,
-} from '@nestjs/common';
+import { NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { plainToClass } from 'class-transformer';
 
 // Satisfies all the requirements of the NestInterceptor interface
 export class SerializeInterceptor implements NestInterceptor {
-  intercept(context: ExecutionContext, handler: CallHandler): Observable<any> {
-    // Run something before a request is handled
-    // by the request handler
-    console.log('I am running before the handler: ', context);
-    return handler.handle().pipe(
-      map((data: any) => {
-        // Run something before the response is sent out
-        console.log('I am running before response is sent out: ', data);
-        // return plainToClass(context.getClass(), data, {
-        //   excludeExtraneousValues: true,
-        // });
+  constructor(private dto: any) {}
+  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+    // context has incoming message, server response, next function
+    // and constructorRef(what class is being used in the controller), handler, contextType(http, graphql, rpc, ws)
+
+    // the next.handle() returns an Observable representing the response stream from the route handler.
+
+    return next.handle().pipe(
+      map((data: typeof this.dto) => {
+        console.log({ data });
+        // data is the Entity that is being returned from the handler
+        return plainToClass(this.dto, data, {
+          excludeExtraneousValues: true, // only include properties that are defined in the DTO
+        });
       }),
     );
   }

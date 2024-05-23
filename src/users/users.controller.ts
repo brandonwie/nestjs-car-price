@@ -13,6 +13,7 @@ import { CreateUserDto } from './dtos/create-user.dto';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { SerializeInterceptor } from 'src/interceptors/serialize.interceptor';
+import { UserDto } from './dtos/user.dto';
 // dto
 // validation dto
 // import dto
@@ -26,7 +27,7 @@ export class UsersController {
     this.usersService.create(body);
   }
 
-  @UseInterceptors(SerializeInterceptor)
+  @UseInterceptors(new SerializeInterceptor(UserDto))
   @Get('/:id')
   findUserById(@Param('id') id: string) {
     return this.usersService.findOneById(parseInt(id));
