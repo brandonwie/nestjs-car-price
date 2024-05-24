@@ -8,7 +8,7 @@ import { CreateUserDto } from './dtos/create-user.dto';
 export class UsersService {
   constructor(@InjectRepository(User) private repo: Repository<User>) {}
 
-  create(dto: CreateUserDto) {
+  async create(dto: CreateUserDto) {
     const user = this.repo.create(dto);
 
     return this.repo.save(user);
