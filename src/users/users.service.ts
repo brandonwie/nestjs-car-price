@@ -8,13 +8,13 @@ import { CreateUserDto } from './dtos/create-user.dto';
 export class UsersService {
   constructor(@InjectRepository(User) private repo: Repository<User>) {}
 
-  async create(dto: CreateUserDto) {
+  async create(dto: CreateUserDto): Promise<User> {
     const user = this.repo.create(dto);
 
     return this.repo.save(user);
   }
 
-  async findOneById(id: number) {
+  async findOneById(id: number): Promise<User> {
     const user = await this.repo.findOne({ where: { id } });
     if (!user) {
       throw new NotFoundException('user not found');
@@ -22,11 +22,11 @@ export class UsersService {
     return user;
   }
 
-  findByEmail(email: string) {
+  findByEmail(email: string): Promise<User[]> {
     return this.repo.find({ where: { email } });
   }
 
-  async update(id: number, attrs: Partial<User>) {
+  async update(id: number, attrs: Partial<User>): Promise<User> {
     const user = await this.findOneById(id);
     if (!user) {
       throw new NotFoundException('user not found');
@@ -37,12 +37,12 @@ export class UsersService {
     return this.repo.save(updatedUser);
   }
 
-  async remove(id: number) {
+  async remove(id: number): Promise<void> {
     const user = await this.findOneById(id);
     if (!user) {
       throw new NotFoundException('user not found');
     }
     // won't use delete method because it doesn't trigger lifecycle hooks
-    return this.repo.remove(user);
+    this.repo.remove(user);
   }
 }

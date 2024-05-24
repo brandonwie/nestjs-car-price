@@ -4,8 +4,17 @@ POST {{baseUrl}}/auth/signup
 Content-Type: application/json
 
 {
-  "email": "test1@email.com",
+  "email": "test2@email.com",
   "password": "test1"
+}
+
+### Sign In
+POST {{baseUrl}}/auth/signin
+Content-Type: application/json
+
+{
+  "email": "test2@email.com",
+  "password": "test2"
 }
 
 ### Remove User

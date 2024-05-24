@@ -1,7 +1,13 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { randomBytes, scrypt as _scrypt, BinaryLike } from 'crypto'; // node built-in module
 import { promisify } from 'util';
+import { User } from './user.entity';
 
 const scrypt: (
   password: BinaryLike,
@@ -15,12 +21,16 @@ const scrypt: (
 export class AuthService {
   constructor(private usersService: UsersService) {}
 
-  async signup(email: string, password: string) {
+  async signup(email: string, password: string): Promise<User> {
     // See if email is in use
     const existingUser = await this.usersService.findByEmail(email);
 
-    if (existingUser) {
-      throw new ConflictException('email in use');
+    console.log(existingUser);
+
+    if (existingUser.length > 0) {
+      // RFC 7231 (Section 6.5.8):
+      // The 409 (Conflict) status code indicates that the request could not be completed due to a conflict with the current state of the resource. This code is used in situations where the user might be able to resolve the conflict and resubmit the request.
+      throw new ConflictException('Email in use');
     }
     // Hash the user's password
     // Generate a salt
@@ -42,5 +52,25 @@ export class AuthService {
     return user;
   }
 
-  validate() {}
+  async signin(email: string, password: string) {
+    const [user] = await this.usersService.findByEmail(email);
+
+    if (!user) {
+      //RFC 7231 (Section 6.5.4):
+      // The 404 (Not Found) status code indicates that the origin server did not find a current representation for the target resource or is not willing to disclose that one exists.
+      throw new NotFoundException('User not found');
+    }
+
+    const [salt, storedHash] = user.password.split('.');
+
+    const hash = await scrypt(password, salt, 32);
+
+    if (storedHash === hash.toString('hex')) {
+      return user;
+    } else {
+      //RFC 7235 (Section 3.1):
+      // The 401 (Unauthorized) status code indicates that the request has not been applied because it lacks valid authentication credentials for the target resource.
+      throw new UnauthorizedException('Wrong password');
+    }
+  }
 }

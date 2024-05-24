@@ -24,7 +24,6 @@ export class SerializeInterceptor implements NestInterceptor {
     return next.handle().pipe(
       map((data) => {
         // the `data` here is the return value from the route handler (if User entity is returned, it will be the User entity)
-        console.log({ data });
         return plainToInstance(this.dto, data, {
           excludeExtraneousValues: true, // only include properties that are defined in the DTO
         });
