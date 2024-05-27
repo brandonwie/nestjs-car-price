@@ -26,6 +26,7 @@ describe('Authentication System', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
+
     await app.init();
   });
 
@@ -41,8 +42,7 @@ describe('Authentication System', () => {
         console.log({ id, email });
         expect(id).toBeDefined();
         expect(email).toEqual(aUser.email);
-      })
-      .catch((error) => console.log({ error }));
+      });
   });
 
   it('handles a delete user request', () => {
@@ -52,7 +52,6 @@ describe('Authentication System', () => {
       .then((res) => {
         console.log({ res });
         expect(res.body).toEqual(undefined);
-      })
-      .catch((error) => console.log({ error }));
+      });
   });
 });

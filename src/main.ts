@@ -12,12 +12,6 @@ async function bootstrap() {
       keys: ['asdfasdf'],
     }),
   );
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true, // strip out any fields that do not have a corresponding property in the DTO
-      forbidNonWhitelisted: true, // throw error if whitelist is true and a non-whitelisted field is present
-    }),
-  );
   await app.listen(3000);
 }
 bootstrap();
