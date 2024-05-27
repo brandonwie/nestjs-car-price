@@ -21,6 +21,27 @@ const scrypt: (
 export class AuthService {
   constructor(private usersService: UsersService) {}
 
+  static async hashPassword(password: string) {
+    // Hash the user's password
+    // Generate a salt
+    // - randomBytes generates a buffer of random bytes
+    const salt = randomBytes(8).toString('hex');
+    // Hash the salt and the password together
+    const hash = (await scrypt(password, salt, 32)).toString('hex');
+    // Join the hashed result and the salt together
+    return `${salt}.${hash}`;
+  }
+
+  static async comparePassword(
+    storedPassword: string,
+    suppliedPassword: string,
+  ) {
+    const [salt, storedHash] = storedPassword.split('.');
+    const hash = (await scrypt(suppliedPassword, salt, 32)).toString('hex');
+
+    return hash === storedHash;
+  }
+
   async signup(email: string, password: string): Promise<User> {
     // See if email is in use
     const existingUser = await this.usersService.findAllByEmail(email);
@@ -30,20 +51,13 @@ export class AuthService {
       // The 409 (Conflict) status code indicates that the request could not be completed due to a conflict with the current state of the resource. This code is used in situations where the user might be able to resolve the conflict and resubmit the request.
       throw new ConflictException('Email in use');
     }
-    // Hash the user's password
-    // Generate a salt
-    // - randomBytes generates a buffer of random bytes
-    const salt = randomBytes(8).toString('hex');
 
-    // Hash teh salt and the password together
-    const hash = await scrypt(password, salt, 32);
-    // Join the hashed result and the salt together
-    const result = salt + '.' + hash.toString('hex');
+    const hashedPassword = await AuthService.hashPassword(password);
 
     // Create a new user and save it
-    const user = this.usersService.create({
+    const user = await this.usersService.create({
       email: email,
-      password: result,
+      password: hashedPassword,
     });
 
     // Return the user
@@ -59,11 +73,12 @@ export class AuthService {
       throw new NotFoundException('User not found');
     }
 
-    const [salt, storedHash] = user.password.split('.');
+    const isPasswordCorrect = await AuthService.comparePassword(
+      user.password,
+      password,
+    );
 
-    const hash = await scrypt(password, salt, 32);
-
-    if (storedHash === hash.toString('hex')) {
+    if (isPasswordCorrect) {
       return user;
     } else {
       //RFC 7235 (Section 3.1):

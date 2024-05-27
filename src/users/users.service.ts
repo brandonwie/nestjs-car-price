@@ -8,13 +8,13 @@ import { CreateUserDto } from './dtos/create-user.dto';
 export class UsersService {
   constructor(@InjectRepository(User) private repo: Repository<User>) {}
 
-  async create(dto: CreateUserDto): Promise<User> {
+  create(dto: CreateUserDto): Promise<User> {
     const user = this.repo.create(dto);
 
     return this.repo.save(user);
   }
 
-  async findOneById(id: number | null): Promise<User> {
+  async findOneById(id: number | null): Promise<User | null> {
     // if id is null, default behavior is to return the first user
     if (!id) {
       return null;
