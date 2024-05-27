@@ -14,7 +14,12 @@ export class UsersService {
     return this.repo.save(user);
   }
 
-  async findOneById(id: number): Promise<User> {
+  async findOneById(id: number | null): Promise<User> {
+    // if id is null, default behavior is to return the first user
+    if (!id) {
+      return null;
+    }
+
     const user = await this.repo.findOne({ where: { id } });
     if (!user) {
       throw new NotFoundException('user not found');
