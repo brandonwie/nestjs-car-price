@@ -23,9 +23,7 @@ export class AuthService {
 
   async signup(email: string, password: string): Promise<User> {
     // See if email is in use
-    const existingUser = await this.usersService.findByEmail(email);
-
-    console.log(existingUser);
+    const existingUser = await this.usersService.findAllByEmail(email);
 
     if (existingUser.length > 0) {
       // RFC 7231 (Section 6.5.8):
@@ -53,7 +51,7 @@ export class AuthService {
   }
 
   async signin(email: string, password: string) {
-    const [user] = await this.usersService.findByEmail(email);
+    const [user] = await this.usersService.findAllByEmail(email);
 
     if (!user) {
       //RFC 7231 (Section 6.5.4):

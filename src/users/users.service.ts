@@ -27,7 +27,7 @@ export class UsersService {
     return user;
   }
 
-  findByEmail(email: string): Promise<User[]> {
+  findAllByEmail(email: string): Promise<User[]> {
     return this.repo.find({ where: { email } });
   }
 

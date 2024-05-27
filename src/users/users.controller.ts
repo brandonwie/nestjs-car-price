@@ -73,7 +73,7 @@ export class UsersController {
 
   @Get()
   findUsersByEmail(@Query('email') email: string) {
-    return this.usersService.findByEmail(email);
+    return this.usersService.findAllByEmail(email);
   }
 
   @Delete('/:id')
