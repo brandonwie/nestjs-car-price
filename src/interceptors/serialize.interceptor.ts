@@ -8,7 +8,9 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ClassConstructor, plainToInstance } from 'class-transformer';
 
-export function Serialize(dto: ClassConstructor<any>) {
+export function Serialize(
+  dto: ClassConstructor<any>,
+): MethodDecorator & ClassDecorator {
   return UseInterceptors(new SerializeInterceptor(dto));
 }
 

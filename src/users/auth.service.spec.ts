@@ -1,4 +1,4 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
 import { AuthService } from './auth.service';
 import { UsersService } from './users.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
@@ -12,7 +12,6 @@ import {
 import { CreateUserDto } from './dtos/create-user.dto';
 
 describe('AuthService', () => {
-  let module: TestingModule;
   let service: AuthService;
   let usersService: UsersService;
   let userRepository: Repository<User>;
@@ -28,16 +27,6 @@ describe('AuthService', () => {
   };
 
   beforeAll(async () => {
-    module = await Test.createTestingModule({
-      providers: [
-        AuthService,
-        UsersService,
-        {
-          provide: getRepositoryToken(User),
-          useValue: mockRepository,
-        },
-      ],
-    }).compile();
     // setup the user object
     const hashedPassword = await AuthService.hashPassword(password);
     aUser = {
@@ -48,6 +37,16 @@ describe('AuthService', () => {
   });
 
   beforeEach(async () => {
+    const module = await Test.createTestingModule({
+      providers: [
+        AuthService,
+        UsersService,
+        {
+          provide: getRepositoryToken(User),
+          useValue: mockRepository,
+        },
+      ],
+    }).compile();
     // only declare the methods that are used in the AuthService
     service = module.get(AuthService);
     usersService = module.get<UsersService>(UsersService);
