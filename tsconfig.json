@@ -11,9 +11,7 @@
     "outDir": "./dist",
     "baseUrl": ".",
     "paths": {
-      "src/*": ["src/*"],
-      "@guards/*": ["src/guards/*"],
-      "@interceptors/*": ["src/interceptors/*"]
+      "@/*": ["src/*"]
     },
     "incremental": true,
     "skipLibCheck": true,

@@ -21,7 +21,7 @@ Content-Type: application/json
 POST {{baseUrl}}/auth/signout
 
 ### Remove User
-DELETE {{baseUrl}}/auth/7
+DELETE {{baseUrl}}/auth/14
 
 ### Get the currently signed user
 GET {{baseUrl}}/auth/whoami
