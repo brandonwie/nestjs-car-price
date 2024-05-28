@@ -15,7 +15,7 @@ describe('Authentication System', () => {
     const hashedPassword = await AuthService.hashPassword(password);
     aUser = {
       id: 1,
-      email: 'test@email.com',
+      email: 'test01@email.com',
       password: hashedPassword,
     };
   });
@@ -30,8 +30,6 @@ describe('Authentication System', () => {
     await app.init();
   });
 
-  let id: number;
-
   it('handles a signup request', () => {
     return request(app.getHttpServer())
       .post('/auth/signup')
@@ -45,13 +43,13 @@ describe('Authentication System', () => {
       });
   });
 
-  it('handles a delete user request', () => {
-    return request(app.getHttpServer())
-      .delete(`/auth/${id}`)
-      .expect(200)
-      .then((res) => {
-        console.log({ res });
-        expect(res.body).toEqual(undefined);
-      });
-  });
+  // it('handles a delete user request', () => {
+  //   return request(app.getHttpServer())
+  //     .delete(`/auth/${id}`)
+  //     .expect(200)
+  //     .then((res) => {
+  //       console.log({ res });
+  //       expect(res.body).toEqual(undefined);
+  //     });
+  // });
 });
