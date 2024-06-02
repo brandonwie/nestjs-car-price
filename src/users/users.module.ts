@@ -21,5 +21,6 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
       // that doesn't need the currentUser
     },
   ],
+  exports: [UsersService],
 })
 export class UsersModule {}

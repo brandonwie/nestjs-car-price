@@ -1,3 +1,4 @@
+import { Report } from '@/reports/report.entity';
 import { IsEmail } from 'class-validator';
 import {
   AfterInsert,
@@ -6,6 +7,7 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
+  OneToMany,
 } from 'typeorm';
 
 @Entity()
@@ -19,6 +21,9 @@ export class User {
 
   @Column()
   password: string;
+
+  @OneToMany(() => Report, (report) => report.user)
+  reports: Report[]; // NOTE doesn't create a column in the database
 
   @AfterInsert()
   logInsert() {
