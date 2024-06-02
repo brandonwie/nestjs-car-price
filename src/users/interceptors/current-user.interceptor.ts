@@ -7,6 +7,8 @@ import {
 
 import { UsersService } from '../users.service';
 
+// NOTE leaving it as an example of how to use Interceptor
+
 @Injectable()
 export class CurrentUserInterceptor implements NestInterceptor {
   constructor(private readonly usersService: UsersService) {}

@@ -31,4 +31,7 @@ export class ReportDto {
   @Transform((params) => params.obj.user.id)
   @Expose()
   userId: number;
+
+  // NOTE if updateApprovedStatus wants to use this DTO,
+  // you need to query the user entity to get the user's id
 }

@@ -15,7 +15,7 @@ Content-Type: application/json
 }
 
 ### Update Approved Status
-PATCH {{baseUrl}}/11
+PATCH {{baseUrl}}/1
 Content-Type: application/json
 
 {

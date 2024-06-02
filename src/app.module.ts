@@ -1,4 +1,9 @@
-import { MiddlewareConsumer, Module, ValidationPipe } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  ValidationPipe,
+} from '@nestjs/common';
 import { APP_PIPE } from '@nestjs/core';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -49,9 +54,8 @@ const cookieSession = require('cookie-session');
     },
   ],
 })
-export class AppModule {
+export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    // reference consumer
     consumer
       .apply(
         cookieSession({
