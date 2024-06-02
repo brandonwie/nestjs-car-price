@@ -37,7 +37,6 @@ describe('Authentication System', () => {
       .expect(201)
       .then((res) => {
         const { id, email } = res.body;
-        console.log({ id, email });
         expect(id).toBeDefined();
         expect(email).toEqual(aUser.email);
       });
@@ -52,4 +51,20 @@ describe('Authentication System', () => {
   //       expect(res.body).toEqual(undefined);
   //     });
   // });
+
+  it('signup as a new user then get the currently logged in user', async () => {
+    const res = await request(app.getHttpServer())
+      .post('/auth/signup')
+      .send({ email: aUser.email, password: password })
+      .expect(201);
+
+    const cookie = res.get('Set-Cookie'); // pulling out the cookie from the response
+
+    const response = await request(app.getHttpServer())
+      .get('/auth/whoami')
+      .set('Cookie', cookie)
+      .expect(200);
+
+    expect(response.body.email).toEqual(aUser.email);
+  });
 });
