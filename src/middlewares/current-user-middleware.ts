@@ -11,7 +11,6 @@ export class CurrentUserMiddleware implements NestMiddleware {
 
     if (userId) {
       const user = await this.usersService.findOneById(userId);
-      // @ts-expect-error currentUser does not exist on Request
       req.currentUser = user;
     }
 
