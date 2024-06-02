@@ -13,3 +13,11 @@ Content-Type: application/json
   "lng": 34.397,
   "lat": 34.397
 }
+
+### Update Approved Status
+PATCH {{baseUrl}}/11
+Content-Type: application/json
+
+{
+  "approved": true
+}
