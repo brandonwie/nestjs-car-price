@@ -1,0 +1,15 @@
+@baseUrl = http://localhost:3000/reports
+
+### Create Report
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "model": "corolla",
+  "make": "toyota",
+  "year": 1980,
+  "mileage": 100000,
+  "price": 1000,
+  "lng": 34.397,
+  "lat": 34.397
+}
