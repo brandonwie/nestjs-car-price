@@ -12,7 +12,7 @@ import { AuthGuard } from '@/guards/auth.guard';
 import { CurrentUser } from '@/users/decorators/current-user.decorator';
 import { User } from '@/users/user.entity';
 import { Serialize } from '@/interceptors/serialize.interceptor';
-import { ReportDto } from './dtos/response/create-report-dto';
+import { ReportDto } from './dtos/response/report-dto';
 import { ApproveReportDto } from './dtos/request/approve-report-dto';
 
 @Controller('reports')
@@ -26,9 +26,10 @@ export class ReportsController {
     return this.reportsService.create(user, body);
   }
 
-  @Patch(':/id')
+  @Patch('/:id')
   @UseGuards(AuthGuard)
   updateApproval(@Param('id') id: string, @Body() body: ApproveReportDto) {
+    console.log(id);
     return this.reportsService.approveReport(parseInt(id), body.approved);
   }
 }
